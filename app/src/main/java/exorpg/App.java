@@ -15,6 +15,8 @@ import java.sql.Statement;
 import exorpg.RPG.*;
 import exorpg.utils.Vector2;
 
+import exorpg.utils.DBManager;
+
 public class App {
 
     static BasicItem[] availableItems = new BasicItem[5];
@@ -22,31 +24,15 @@ public class App {
     static Arme[] availableWeapons = new Arme[10];
     static Personnage[] monstres = new Personnage[10];
     static Scanner scan;
+    static Statement statement = null;
+    static String sql = null;
 
     public static void main(String[] args) {
-        String sql = null;
-        Connection connection = null;
-        String database = "florin_rpg";
-        String url = "jdbc:mysql://51.68.227.19:3306/" + database;
-        String user = "M2I";
-        String password = "H3ll0M2I";
-        try {
-            connection = DriverManager.getConnection(url, user, password);
-            if (connection != null) {
-                System.out.println("Connected to the database");
-            }
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-            // scan = new Scanner(System.in);
-            // createItems();
-            // generateDungeon();
-        } catch (SQLException ex) {
-            System.out.println("SQLException:" + ex.getMessage());
-            System.out.println("SQLState:" + ex.getSQLState());
-            System.out.println("VendorError:" + ex.getErrorCode());
-            // System.out.println("An error occurred. Maybe user/password is invalid");
-            // ex.printStackTrace();
-        }
+        DBManager.init();
+
+        scan = new Scanner(System.in);
+        createItems();
+        generateDungeon();
 
         System.out.println(availableArmors);
         Personnage paul = new Personnage("Jean-Paul");
@@ -77,6 +63,7 @@ public class App {
             combattre(paul, personnage);
         }
         scan.close();
+        DBManager.close();
     }
 
     public static void combattre(Personnage p1, Personnage p2) {
@@ -159,6 +146,13 @@ public class App {
         for (int i = 0; i < availableItems.length; i++) {
             availableItems[i] = new PotionSoin("Potion " + (i + 1) * 5 + "PV");
             ((PotionSoin) availableItems[i]).setPvRendu((i + 1) * 5);
+
+            sql = "insert into potions (type, nom, valeur, poids), values ";
+            sql += "('0','" + availableItems[i].getNom() + "','"
+                    + ((PotionSoin) availableItems[i]).getPvRendu() + "','"
+                    + availableItems[i].getPoids() + ")";
+            DBManager.executeUpdate(sql);
+
         }
         String[] types = new String[] { "Papier", "Bois", "Cuivre", "Fer", "Or", "Diamand", "Flammes", "Glace", "Ether",
                 "Divine" };
