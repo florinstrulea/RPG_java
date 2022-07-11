@@ -147,10 +147,10 @@ public class App {
             availableItems[i] = new PotionSoin("Potion " + (i + 1) * 5 + "PV");
             ((PotionSoin) availableItems[i]).setPvRendu((i + 1) * 5);
 
-            sql = "insert into potions (type, nom, valeur, poids), values ";
-            sql += "('0','" + availableItems[i].getNom() + "','"
+            sql = "insert into potions (type, nom, valeur, poids), values"
+                    + "('0','" + availableItems[i].getNom() + "','"
                     + ((PotionSoin) availableItems[i]).getPvRendu() + "','"
-                    + availableItems[i].getPoids() + ")";
+                    + availableItems[i].getPoids() + "');";
             DBManager.executeUpdate(sql);
 
         }
