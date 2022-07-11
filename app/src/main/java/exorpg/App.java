@@ -26,7 +26,8 @@ public class App {
     public static void main(String[] args) {
         String sql = null;
         Connection connection = null;
-        String url = "jdbc:mysql://51.68.227.19:3306/florin";
+        String database = "florin_rpg";
+        String url = "jdbc:mysql://51.68.227.19:3306/" + database;
         String user = "M2I";
         String password = "H3ll0M2I";
         try {
