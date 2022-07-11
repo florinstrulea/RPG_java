@@ -147,11 +147,11 @@ public class App {
             availableItems[i] = new PotionSoin("Potion " + (i + 1) * 5 + "PV");
             ((PotionSoin) availableItems[i]).setPvRendu((i + 1) * 5);
 
-            sql = "insert into potions (type, nom, valeur, poids), values"
-                    + "('0','" + availableItems[i].getNom() + "','"
-                    + ((PotionSoin) availableItems[i]).getPvRendu() + "','"
-                    + availableItems[i].getPoids() + "');";
-            DBManager.executeUpdate(sql);
+            // sql = "insert into potions (type, nom, valeur, poids) values"
+            // + "(0,'" + availableItems[i].getNom() + "',"
+            // + ((PotionSoin) availableItems[i]).getPvRendu() + ","
+            // + availableItems[i].getPoids() + ");";
+            // DBManager.executeUpdate(sql);
 
         }
         String[] types = new String[] { "Papier", "Bois", "Cuivre", "Fer", "Or", "Diamand", "Flammes", "Glace", "Ether",
@@ -159,11 +159,20 @@ public class App {
         for (int i = 0; i < availableArmors.length; i++) {
             availableArmors[i] = new Armure("Armure de " + types[i]);
             availableArmors[i].setDefense((int) (Math.random() * 5 * (i + 1)));
+            // sql = "insert into armures (nom, defense, poids) values" + "('" +
+            // availableArmors[i].getNom() + "',"
+            // + availableArmors[i].getDefense() + "," + availableArmors[i].getPoids() +
+            // ")";
+            // DBManager.executeUpdate(sql);
         }
         for (int i = 0; i < availableWeapons.length; i++) {
             availableWeapons[i] = new Arme("Epée de " + types[i]);
             availableWeapons[i].setDegats((int) (Math.random() * 5 * (i + 1)));
             availableWeapons[i].setCritique((float) Math.random() * 5 * (i + 1) / 100);
+            sql = "insert into armes (nom, degats, critique, poids) values" + "('" + availableWeapons[i].getNom() + "',"
+                    + availableWeapons[i].getDegats() + "," + availableWeapons[i].getCritique() + ","
+                    + availableWeapons[i].getPoids() + ")";
+            DBManager.executeUpdate(sql);
         }
     }
 }
