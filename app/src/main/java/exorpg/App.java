@@ -10,9 +10,8 @@ import com.google.common.base.Optional;
 import exorpg.RPG.*;
 import exorpg.utils.Vector2;
 
-
 public class App {
-    
+
     static BasicItem[] availableItems = new BasicItem[5];
     static Armure[] availableArmors = new Armure[10];
     static Arme[] availableWeapons = new Arme[10];
@@ -20,143 +19,140 @@ public class App {
     static Scanner scan;
 
     public static void main(String[] args) {
-        try{    
+        try {
             scan = new Scanner(System.in);
             createItems();
             generateDungeon();
-        }
-        catch(NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("Ohlala rien ne va plus !");
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             System.out.println("Coucou !");
-        }
-        finally{
+        } finally {
             System.out.println("Appelez les pompiers !");
         }
-        
+
         System.out.println(availableArmors);
         Personnage paul = new Personnage("Jean-Paul");
-        
 
         paul.setPv(100);
         paul.setForce(10);
-        
 
-        System.out.println("Vous incarnez le héro suivant "+paul);
-        System.out.println("Il a "+paul.getForce()+" Force");
+        System.out.println("Vous incarnez le héro suivant " + paul);
+        System.out.println("Il a " + paul.getForce() + " Force");
 
         Arme epee = new Arme("Epee rouillée", 10, 0.2f);
         Armure carton = new Armure("Cartons sctochés", 10);
 
         paul.setArmor(carton);
-        try{
+        try {
             paul.setEquipedWeapon(epee);
-        }
-        catch(PersonnageException e){
+        } catch (PersonnageException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getStackTrace());
         }
-        
-        paul.ajouterItem(availableItems[0]);
-        paul.ajouterItem(availableItems[0]);
-        paul.ajouterItem(availableItems[0]);
 
+        paul.ajouterItem(availableItems[0]);
+        paul.ajouterItem(availableItems[0]);
+        paul.ajouterItem(availableItems[0]);
 
         for (Personnage personnage : monstres) {
-            System.out.println("Vous combattez "+personnage);
+            System.out.println("Vous combattez " + personnage);
             combattre(paul, personnage);
         }
         scan.close();
     }
 
-    public static void combattre(Personnage p1, Personnage p2){
+    public static void combattre(Personnage p1, Personnage p2) {
         int i = 0;
-        while(p1.getPv() > 0 && p2.getPv() > 0){
-            if(i % 2 == 0){
+        while (p1.getPv() > 0 && p2.getPv() > 0) {
+            if (i % 2 == 0) {
                 System.out.println("Choisissez la prochaine action : ");
                 System.out.println("1 : Attaquer");
                 System.out.println("2 : Utliser une potion");
                 int decision = scan.nextInt();
-                switch(decision){
+                switch (decision) {
                     case 1:
                         p1.attaquer(p2);
                         break;
                     case 2:
                         int j = 0;
                         int nbPotions = 0;
-                        for(BasicItem item : p1.getInventaire()){
-                            if(item instanceof PotionSoin){
-                                System.out.println(j+" : "+item.getNom());
+                        for (BasicItem item : p1.getInventaire()) {
+                            if (item instanceof PotionSoin) {
+                                System.out.println(j + " : " + item.getNom());
                                 nbPotions++;
                             }
                             j++;
                         }
                         // TODO gérer ça mieux
-                        if(nbPotions == 0)
+                        if (nbPotions == 0)
                             p1.attaquer(p2);
-                        else{
+                        else {
                             System.out.println("Quelle potion souhaitez vous utiliser ?");
                             int potionAUtiliser = scan.nextInt();
-                            while(!(p1.getInventaire().get(potionAUtiliser) instanceof Consommable))
+                            while (!(p1.getInventaire().get(potionAUtiliser) instanceof Consommable))
                                 potionAUtiliser = scan.nextInt();
 
-                            PotionSoin potion = (PotionSoin)(p1.getInventaire().get(potionAUtiliser));
+                            PotionSoin potion = (PotionSoin) (p1.getInventaire().get(potionAUtiliser));
                             potion.consommer(p1);
                             p1.retirerItem(potion);
                         }
                         break;
-                    default : 
+                    default:
                         p1.attaquer(p2);
                 }
-            }
-            else
+            } else
                 p2.attaquer(p1);
             i++;
         }
 
-        System.out.println("Le vainqueur est : "+((p1.getPv()>0) ? p1 : p2));
+        System.out.println("Le vainqueur est : " + ((p1.getPv() > 0) ? p1 : p2));
     }
 
-    public static BasicItem[] initInventaire(){  
+    public static BasicItem[] initInventaire() {
         BasicItem[] monInventaire = new BasicItem[5];
         return monInventaire;
     }
 
-    public static void generateDungeon(){
-        String[] noms = new String[] {"Gobelin", "Orc", "Troll", "Elfe", "Fantôme"};
-        String[] adj = new String[] { "peureux", "prétentieux", "stupide", "passionné", "pessimiste", "idéaliste", "gigantesque", "courageux", "âgé", "jaune", "violet", "vert", "endurant", "prévoyant", "vigilant", "volontaire", "communiste", "de droite", "en marche", "écolo"};
+    public static void generateDungeon() {
+        String[] noms = new String[] { "Gobelin", "Orc", "Troll", "Elfe", "Fantôme" };
+        String[] adj = new String[] { "peureux", "prétentieux", "stupide", "passionné", "pessimiste", "idéaliste",
+                "gigantesque", "courageux", "âgé", "jaune", "violet", "vert", "endurant", "prévoyant", "vigilant",
+                "volontaire", "communiste", "de droite", "en marche", "écolo" };
 
-        for(int i = 0; i < monstres.length; i++){
-            monstres[i] = new Personnage(noms[(int)(Math.random() * noms.length)]+" "+adj[(int)(Math.random() * adj.length)], (int)(i+1 * Math.random() * 30), (int)(i+1 * Math.random()));
-            System.out.println("Monstre : "+monstres[i]);
-            try{
+        for (int i = 0; i < monstres.length; i++) {
+            monstres[i] = new Personnage(
+                    noms[(int) (Math.random() * noms.length)] + " " + adj[(int) (Math.random() * adj.length)],
+                    (int) (i + 1 * Math.random() * 30), (int) (i + 1 * Math.random()));
+            System.out.println("Monstre : " + monstres[i]);
+            // try{
 
-                Optional<Arme> test = null;
-                monstres[i].setEquipedWeapon(test);
-            }
-            catch(PersonnageException e){
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-            }
-            monstres[i].setArmor(availableArmors[(int)(Math.random() * i)]);
+            // Optional<Arme> test = null;
+            // monstres[i].setEquipedWeapon(test);
+            // }
+            // catch(PersonnageException e){
+            // System.out.println(e.getMessage());
+            // e.printStackTrace();
+            // }
+            monstres[i].setArmor(availableArmors[(int) (Math.random() * i)]);
         }
     }
 
-    public static void createItems(){
-        for(int i = 0; i < availableItems.length; i++){
-            availableItems[i] = new PotionSoin("Potion "+(i+1)*5+"PV");
-            ((PotionSoin)availableItems[i]).setPvRendu((i+1)*5);
+    public static void createItems() {
+        for (int i = 0; i < availableItems.length; i++) {
+            availableItems[i] = new PotionSoin("Potion " + (i + 1) * 5 + "PV");
+            ((PotionSoin) availableItems[i]).setPvRendu((i + 1) * 5);
         }
-        String[] types = new String[] {"Papier", "Bois", "Cuivre", "Fer", "Or", "Diamand", "Flammes", "Glace", "Ether", "Divine"};
-        for(int i = 0; i < availableArmors.length; i++){
-            availableArmors[i] = new Armure("Armure de "+types[i]);
-            availableArmors[i].setDefense((int)(Math.random() * 5 * (i+1)));
+        String[] types = new String[] { "Papier", "Bois", "Cuivre", "Fer", "Or", "Diamand", "Flammes", "Glace", "Ether",
+                "Divine" };
+        for (int i = 0; i < availableArmors.length; i++) {
+            availableArmors[i] = new Armure("Armure de " + types[i]);
+            availableArmors[i].setDefense((int) (Math.random() * 5 * (i + 1)));
         }
-        for(int i = 0; i < availableWeapons.length; i++){
-            availableWeapons[i] = new Arme("Epée de "+types[i]);
-            availableWeapons[i].setDegats((int)(Math.random() * 5 * (i+1)));
-            availableWeapons[i].setCritique((float)Math.random() * 5 * (i+1) / 100);
+        for (int i = 0; i < availableWeapons.length; i++) {
+            availableWeapons[i] = new Arme("Epée de " + types[i]);
+            availableWeapons[i].setDegats((int) (Math.random() * 5 * (i + 1)));
+            availableWeapons[i].setCritique((float) Math.random() * 5 * (i + 1) / 100);
         }
     }
 }
