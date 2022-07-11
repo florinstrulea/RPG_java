@@ -48,15 +48,15 @@ public class Personnage {
         return equipedWeapon;
     }
 
-    public void setEquipedWeapon(Arme equipedWeapon) throws PersonnageException {
+    public void setEquipedWeapon(Arme equipedWeapon) {
         //
         // ...
         //
         // equipedWeapon.
-        if (equipedWeapon == null) {
-            throw new PersonnageException("Hey !");
-        } else
-            this.equipedWeapon = equipedWeapon;
+        // if (equipedWeapon == null) {
+        // throw new PersonnageException("Hey !");
+        // } else
+        this.equipedWeapon = equipedWeapon;
     }
 
     public String toString() {

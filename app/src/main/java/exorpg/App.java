@@ -47,12 +47,12 @@ public class App {
         Armure carton = new Armure("Cartons sctochés", 10);
 
         paul.setArmor(carton);
-        try {
-            paul.setEquipedWeapon(epee);
-        } catch (PersonnageException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getStackTrace());
-        }
+        // try {
+        paul.setEquipedWeapon(epee);
+        // } catch (PersonnageException e) {
+        // System.out.println(e.getMessage());
+        // System.out.println(e.getStackTrace());
+        // }
 
         paul.ajouterItem(availableItems[0]);
         paul.ajouterItem(availableItems[0]);
@@ -139,6 +139,12 @@ public class App {
             // e.printStackTrace();
             // }
             monstres[i].setArmor(availableArmors[(int) (Math.random() * i)]);
+            monstres[i].setEquipedWeapon(availableWeapons[(int) (Math.random() * i)]);
+
+            sql = "insert into personnages (type, nom, pv, pvMax, `force`, id_armure, id_arme) values" + "(" + 0 + ",'"
+                    + monstres[i].getNom() + "'," + monstres[i].getPv() + "," + monstres[i].getPv() + ","
+                    + monstres[i].getForce() + "," + (i + 1) + "," + (i + 1) + ")";
+            DBManager.executeUpdate(sql);
         }
     }
 
@@ -169,10 +175,12 @@ public class App {
             availableWeapons[i] = new Arme("Epée de " + types[i]);
             availableWeapons[i].setDegats((int) (Math.random() * 5 * (i + 1)));
             availableWeapons[i].setCritique((float) Math.random() * 5 * (i + 1) / 100);
-            sql = "insert into armes (nom, degats, critique, poids) values" + "('" + availableWeapons[i].getNom() + "',"
-                    + availableWeapons[i].getDegats() + "," + availableWeapons[i].getCritique() + ","
-                    + availableWeapons[i].getPoids() + ")";
-            DBManager.executeUpdate(sql);
+            // sql = "insert into armes (nom, degats, critique, poids) values" + "('" +
+            // availableWeapons[i].getNom() + "',"
+            // + availableWeapons[i].getDegats() + "," + availableWeapons[i].getCritique() +
+            // ","
+            // + availableWeapons[i].getPoids() + ")";
+            // DBManager.executeUpdate(sql);
         }
     }
 }
