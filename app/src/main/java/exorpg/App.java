@@ -3,9 +3,14 @@
  */
 package exorpg;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.google.common.base.Optional;
+import java.sql.Statement;
 
 import exorpg.RPG.*;
 import exorpg.utils.Vector2;
@@ -19,16 +24,27 @@ public class App {
     static Scanner scan;
 
     public static void main(String[] args) {
+        String sql = null;
+        Connection connection = null;
+        String url = "jdbc:mysql://51.68.227.19:3306/florin";
+        String user = "M2I";
+        String password = "H3ll0M2I";
         try {
-            scan = new Scanner(System.in);
-            createItems();
-            generateDungeon();
-        } catch (NullPointerException e) {
-            System.out.println("Ohlala rien ne va plus !");
-        } catch (ArithmeticException e) {
-            System.out.println("Coucou !");
-        } finally {
-            System.out.println("Appelez les pompiers !");
+            connection = DriverManager.getConnection(url, user, password);
+            if (connection != null) {
+                System.out.println("Connected to the database");
+            }
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            // scan = new Scanner(System.in);
+            // createItems();
+            // generateDungeon();
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
+            // System.out.println("An error occurred. Maybe user/password is invalid");
+            // ex.printStackTrace();
         }
 
         System.out.println(availableArmors);
