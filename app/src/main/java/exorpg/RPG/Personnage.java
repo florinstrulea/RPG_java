@@ -2,7 +2,6 @@ package exorpg.RPG;
 
 import java.util.*;
 
-
 public class Personnage {
 
     protected static Arme poings = new Arme("Poings", 1, 0.01f);
@@ -17,7 +16,7 @@ public class Personnage {
     protected Armure armor = aucune;
     protected Arme equipedWeapon = poings;
 
-    public Personnage(String nom){
+    public Personnage(String nom) {
         this.nom = nom;
 
     }
@@ -30,12 +29,13 @@ public class Personnage {
         this.inventaire = inventaire;
     }
 
-    public Personnage(String nom, int pv, int force){
+    public Personnage(String nom, int pv, int force) {
         this.nom = nom;
         this.pv = pv;
         this.force = force;
     }
-    //#region GETSET
+
+    // #region GETSET
     public Armure getArmor() {
         return armor;
     }
@@ -50,18 +50,17 @@ public class Personnage {
 
     public void setEquipedWeapon(Arme equipedWeapon) throws PersonnageException {
         //
-        //...
+        // ...
         //
-        equipedWeapon.
-        if(equipedWeapon == null){
+        // equipedWeapon.
+        if (equipedWeapon == null) {
             throw new PersonnageException("Hey !");
-        }
-        else
+        } else
             this.equipedWeapon = equipedWeapon;
     }
 
-    public String toString(){
-        return this.nom+"("+this.pv+")";
+    public String toString() {
+        return this.nom + "(" + this.pv + ")";
     }
 
     public String getNom() {
@@ -87,58 +86,63 @@ public class Personnage {
     public void setForce(int force) {
         this.force = force;
     }
-    //#endregion
-    public float attaquer(Personnage autre){
+
+    // #endregion
+    public float attaquer(Personnage autre) {
         int degats = equipedWeapon.getDegats();
-        if(Math.random() < (equipedWeapon.getCritique() + this.force / 100)){
+        if (Math.random() < (equipedWeapon.getCritique() + this.force / 100)) {
             degats *= 2;
         }
 
         degats *= (1 + 0.1f * this.force);
-        System.out.println(this.nom+" utilise "+equipedWeapon.getNom()+ " et tente d'infliger "+degats+" a "+autre.getNom());
-        
+        System.out.println(this.nom + " utilise " + equipedWeapon.getNom() + " et tente d'infliger " + degats + " a "
+                + autre.getNom());
+
         autre.prendreCoup(degats);
 
         return degats;
     }
-    public float prendreCoup(float degats){
-        degats *= (1-(this.armor.getDefense()/100.0f));
+
+    public float prendreCoup(float degats) {
+        degats *= (1 - (this.armor.getDefense() / 100.0f));
         this.pv -= degats;
-        System.out.println(this.nom+ " reçoit "+ degats +" ! Il lui reste "+this.pv+" points de vie !");
+        System.out.println(this.nom + " reçoit " + degats + " ! Il lui reste " + this.pv + " points de vie !");
         return degats;
     }
-    public boolean ajouterItem(BasicItem item){
+
+    public boolean ajouterItem(BasicItem item) {
         return inventaire.add(item);
     }
-    public boolean retirerItem(BasicItem item){
+
+    public boolean retirerItem(BasicItem item) {
         return inventaire.remove(item);
     }
 
-    public BasicItem retirerItem(int index){
+    public BasicItem retirerItem(int index) {
         return inventaire.remove(index);
     }
+
     /*
      * Version alternative en mettant la méthode equip sur Personnage
      */
-    public boolean equip(Arme weapon) throws PersonnageException{
-        if(this.getEquipedWeapon() != null && this.getEquipedWeapon() != poings)
+    public boolean equip(Arme weapon) throws PersonnageException {
+        if (this.getEquipedWeapon() != null && this.getEquipedWeapon() != poings)
             this.ajouterItem(this.getEquipedWeapon());
-        if(this.retirerItem(weapon)){
+        if (this.retirerItem(weapon)) {
             this.setEquipedWeapon(weapon);
             return true;
-        }
-        else
+        } else
             this.setEquipedWeapon(poings);
         return false;
     }
-    public boolean equip(Armure armor) throws PersonnageException{
-        if(this.getArmor() != null && this.getArmor() != aucune)
+
+    public boolean equip(Armure armor) throws PersonnageException {
+        if (this.getArmor() != null && this.getArmor() != aucune)
             this.ajouterItem(this.getArmor());
-        if(this.retirerItem(armor)){
+        if (this.retirerItem(armor)) {
             this.setArmor(armor);
             return true;
-        }
-        else
+        } else
             this.setArmor(aucune);
         return false;
     }
