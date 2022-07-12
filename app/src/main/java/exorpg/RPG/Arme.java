@@ -40,6 +40,28 @@ public class Arme extends BasicItem implements Equipable {
         }
     }
 
+    public boolean get(int id) {
+        try {
+            ResultSet result = DBManager.execute("select * from armes where id_arme=" + id);
+            if (result.next()) {
+                this.nom = result.getString("nom");
+                this.degats = result.getInt("degats");
+                this.critique = result.getFloat("critique");
+                this.poids = result.getInt("poids");
+                this.icon = result.getString("icon");
+                this.id = id;
+                return true;
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
+
+        }
+        return false;
+    }
+
     public int getDegats() {
         return degats;
     }

@@ -49,8 +49,8 @@ public class DBManager {
         try {
             Statement statement = DBManager.connection.createStatement();
             result = statement.executeUpdate(sql);
-            if (result != 1) {
-                System.out.println("Nous avons affecté " + result + "rows");
+            if (result > 0) {
+                System.out.println("Nous avons affecté " + result + " rows");
             }
         } catch (SQLException ex) {
             System.out.println("SQLException:" + ex.getMessage());

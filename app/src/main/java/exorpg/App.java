@@ -29,10 +29,10 @@ public class App {
 
     public static void main(String[] args) {
         DBManager.init();
-
+        DBManager.executeUpdate("insert into potions (type, nom, valeur, poids) values(1,'PotionTest',5,2);");
         scan = new Scanner(System.in);
-        createItems();
-        generateDungeon();
+        // createItems();
+        // generateDungeon();
         // fillPotions();
         Arme arme1 = new Arme(1);
 
@@ -143,10 +143,12 @@ public class App {
             monstres[i].setArmor(availableArmors[(int) (Math.random() * i)]);
             monstres[i].setEquipedWeapon(availableWeapons[(int) (Math.random() * i)]);
 
-            sql = "insert into personnages (type, nom, pv, pvMax, `force`, id_armure, id_arme) values" + "(" + 0 + ",'"
-                    + monstres[i].getNom() + "'," + monstres[i].getPv() + "," + monstres[i].getPv() + ","
-                    + monstres[i].getForce() + "," + (i + 1) + "," + (i + 1) + ")";
-            DBManager.executeUpdate(sql);
+            // sql = "insert into personnages (type, nom, pv, pvMax, `force`, id_armure,
+            // id_arme) values" + "(" + 0 + ",'"
+            // + monstres[i].getNom() + "'," + monstres[i].getPv() + "," +
+            // monstres[i].getPv() + ","
+            // + monstres[i].getForce() + "," + (i + 1) + "," + (i + 1) + ")";
+            // DBManager.executeUpdate(sql);
         }
     }
 
