@@ -1,5 +1,6 @@
 package exorpg.RPG;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -62,26 +63,59 @@ public class Arme extends BasicItem implements Equipable {
         return false;
     }
 
-    public boolean save(int id) {
+    // public boolean save() {
+    // String sql;
+    // if (this.id != 0) {
+    // sql = "update armes" +
+    // " set nom= '" + this.nom + "'," +
+    // " degats= " + this.degats + ", " +
+    // " critique= " + this.critique + ", " +
+    // " poids= " + this.poids + ", " +
+    // " icon= '" + this.icon + "'" +
+    // " where id_arme= " + id;
+    // } else {
+    // sql = "insert into armes(nom, degats, critique,poids, icon) " +
+    // "values(" +
+    // "'" + this.nom + "'" +
+    // "'" + this.degats + "'" +
+    // "'" + this.critique + "'" +
+    // "'" + this.poids + "'" +
+    // "'" + this.icon + "')";
+
+    // }
+    // return (DBManager.executeUpdate(sql) > 0);
+    // }
+
+    public boolean save() {
         String sql;
         if (this.id != 0) {
-            sql = "update armes "
-                    + "set nom= '" + this.nom + "'" +
-                    "set degats= " + this.degats + " " +
-                    "set critique= " + this.critique + " " +
-                    "set poids= " + this.poids + " " +
-                    "set icon= '" + this.icon + "'";
-        } else {
-            sql = "insert into armes(nom, degats, critique,poids, icon) " +
-                    "values(" +
-                    "'" + this.nom + "'" +
-                    "'" + this.degats + "'" +
-                    "'" + this.critique + "'" +
-                    "'" + this.poids + "'" +
-                    "'" + this.icon + "')";
+            sql = "update armes" +
+                    " set nom=?, degats=?, critique=?, poids=?, icon=?" +
+                    " where id_arme= ?";
 
+        } else {
+
+            sql = "insert into armes(nom, degats, critique,poids, icon) " +
+                    "values(?,?,?,?,?)";
+        }
+
+        try {
+            PreparedStatement pstmt = DBManager.connection.prepareStatement(sql);
+            DBManager.pstmt.setString(1, this.nom);
+            DBManager.pstmt.setInt(2, this.degats);
+            DBManager.pstmt.setFloat(3, this.critique);
+            DBManager.pstmt.setInt(4, this.poids);
+            DBManager.pstmt.setString(5, this.icon);
+            if (id != 0) {
+                pstmt.setInt(6, this.id);
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
         }
         return (DBManager.executeUpdate(sql) > 0);
+
     }
 
     public int getDegats() {

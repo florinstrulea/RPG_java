@@ -5,6 +5,7 @@ package exorpg;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,41 +30,67 @@ public class App {
 
     public static void main(String[] args) {
         DBManager.init();
-        DBManager.executeUpdate("insert into potions (type, nom, valeur, poids) values(1,'PotionTest',5,2);");
+        // DBManager.executeUpdate("insert into potions (type, nom, valeur, poids)
+        // values(1,'PotionTest',5,2);");
         scan = new Scanner(System.in);
         // createItems();
         // generateDungeon();
         // fillPotions();
-        Arme arme1 = new Arme(1);
+        Arme arme2 = new Arme("");
+        arme2.get(2);
+        System.out.println(arme2.getNom());
 
-        System.out.println(availableArmors);
-        Personnage paul = new Personnage("Jean-Paul");
-
-        paul.setPv(100);
-        paul.setForce(10);
-
-        System.out.println("Vous incarnez le héro suivant " + paul);
-        System.out.println("Il a " + paul.getForce() + " Force");
-
-        Arme epee = new Arme("Epee rouillée", 10, 0.2f);
-        Armure carton = new Armure("Cartons sctochés", 10);
-
-        paul.setArmor(carton);
+        Arme arme3 = new Arme(3);
+        arme3.setNom("Epée invisible");
+        arme3.save();
         // try {
-        paul.setEquipedWeapon(epee);
-        // } catch (PersonnageException e) {
-        // System.out.println(e.getMessage());
-        // System.out.println(e.getStackTrace());
+        // // Statement stmt = DBManager.connection.createStatement();
+        // String sql = "insert into armes(nom,degats,critique,poid) values(?,?,?,?)";
+        // PreparedStatement pstmt = DBManager.connection.prepareStatement(sql);
+        // pstmt.setString(1, "Epée neuve");
+        // pstmt.setInt(2, 30);
+        // pstmt.setFloat(3, 0.45f);
+        // pstmt.setInt(4, 5);
+
+        // pstmt.execute();
+        // } catch (SQLException ex) {
+        // System.out.println("SQLException:" + ex.getMessage());
+        // System.out.println("SQLState:" + ex.getSQLState());
+        // System.out.println("VendorError:" + ex.getErrorCode());
         // }
 
-        // paul.ajouterItem(availableItems[0]);
-        // paul.ajouterItem(availableItems[0]);
-        // paul.ajouterItem(availableItems[0]);
+        // Arme arme1 = new Arme(2);
+        // arme1.setNom("Epee un peu rouillée");
+        // arme1.save();
 
-        for (Personnage personnage : monstres) {
-            System.out.println("Vous combattez " + personnage);
-            combattre(paul, personnage);
-        }
+        // System.out.println(availableArmors);
+        // Personnage paul = new Personnage("Jean-Paul");
+
+        // paul.setPv(100);
+        // paul.setForce(10);
+
+        // System.out.println("Vous incarnez le héro suivant " + paul);
+        // System.out.println("Il a " + paul.getForce() + " Force");
+
+        // Arme epee = new Arme("Epee rouillée", 10, 0.2f);
+        // Armure carton = new Armure("Cartons sctochés", 10);
+
+        // paul.setArmor(carton);
+        // // try {
+        // paul.setEquipedWeapon(epee);
+        // // } catch (PersonnageException e) {
+        // // System.out.println(e.getMessage());
+        // // System.out.println(e.getStackTrace());
+        // // }
+
+        // // paul.ajouterItem(availableItems[0]);
+        // // paul.ajouterItem(availableItems[0]);
+        // // paul.ajouterItem(availableItems[0]);
+
+        // for (Personnage personnage : monstres) {
+        // System.out.println("Vous combattez " + personnage);
+        // combattre(paul, personnage);
+        // }
         scan.close();
         DBManager.close();
     }

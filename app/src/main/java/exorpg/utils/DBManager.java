@@ -10,6 +10,8 @@ public class DBManager {
     private static String database = "florin_rpg";
     private static String url = "jdbc:mysql://51.68.227.19:3306/" + database;
 
+    public static PreparedStatement pstmt;
+
     public static void init() {
         try {
             DBManager.connection = DriverManager.getConnection(url, user, password);
