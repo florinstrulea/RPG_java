@@ -157,4 +157,10 @@ public class Arme extends BasicItem implements Equipable {
         return false;
     }
 
+    @Override
+    public boolean save(int id) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

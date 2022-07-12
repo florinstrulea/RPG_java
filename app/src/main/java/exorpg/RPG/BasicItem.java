@@ -1,11 +1,13 @@
 package exorpg.RPG;
 
-public abstract class BasicItem {
+import exorpg.utils.Model;
+
+public abstract class BasicItem extends Model {
     protected String nom;
     protected int poids;
     protected String icon;
 
-    public BasicItem(String nom){
+    public BasicItem(String nom) {
         this.nom = nom;
     }
 
@@ -33,5 +35,4 @@ public abstract class BasicItem {
         this.icon = icon;
     }
 
-    
 }

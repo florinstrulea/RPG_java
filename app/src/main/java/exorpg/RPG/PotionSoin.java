@@ -44,4 +44,16 @@ public class PotionSoin extends BasicItem implements Consommable {
         cible.setPv(cible.getPv() + pvRendu);
     }
 
+    @Override
+    public boolean get(int id) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean save(int id) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

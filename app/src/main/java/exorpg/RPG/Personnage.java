@@ -1,8 +1,9 @@
 package exorpg.RPG;
 
 import java.util.*;
+import exorpg.utils.Model;
 
-public class Personnage {
+public class Personnage extends Model {
 
     protected static Arme poings = new Arme("Poings", 1, 0.01f);
     protected static Armure aucune = new Armure("Aucune", 0);
@@ -144,6 +145,18 @@ public class Personnage {
             return true;
         } else
             this.setArmor(aucune);
+        return false;
+    }
+
+    @Override
+    public boolean get(int id) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean save(int id) {
+        // TODO Auto-generated method stub
         return false;
     }
 }

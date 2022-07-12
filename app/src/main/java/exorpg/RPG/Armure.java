@@ -64,4 +64,16 @@ public class Armure extends BasicItem implements Equipable {
         }
         return false;
     }
+
+    @Override
+    public boolean get(int id) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean save(int id) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
