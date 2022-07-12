@@ -33,7 +33,7 @@ public class App {
         scan = new Scanner(System.in);
         createItems();
         generateDungeon();
-        fillPotions();
+        // fillPotions();
 
         System.out.println(availableArmors);
         Personnage paul = new Personnage("Jean-Paul");
@@ -185,26 +185,32 @@ public class App {
         }
     }
 
-    public static void fillPotions() {
-        sql = "select nom, valeur from potions";
-        ResultSet result = DBManager.execute(sql);
-        try {
-            while (result.next()) {
-                PotionSoin potion = new PotionSoin(result.getString("nom"));
-                ((PotionSoin) potion).setPvRendu(result.getInt("valeur"));
-                availableItems.add(potion);
+    // public static void fillPotions() {
+    // sql = "select nom, valeur from potions";
+    // try {
+    // ResultSet result = DBManager.execute(sql);
+    // while (result.next()) {
+    // PotionSoin potion = new PotionSoin(result.getString("nom"));
+    // ((PotionSoin) potion).setPvRendu(result.getInt("valeur"));
+    // availableItems.add(potion);
 
-            }
-            for (BasicItem item : availableItems) {
-                System.out.println(item.getNom());
-                System.out.println(((PotionSoin) item).getPvRendu());
-            }
-        } catch (SQLException ex) {
-            System.out.println("SQLException:" + ex.getMessage());
-            System.out.println("SQLState:" + ex.getSQLState());
-            System.out.println("VendorError:" + ex.getErrorCode());
+    // }
+    // for (BasicItem item : availableItems) {
+    // System.out.println(item.getNom());
+    // System.out.println(((PotionSoin) item).getPvRendu());
+    // }
+    // } catch (SQLException ex) {
+    // System.out.println("SQLException:" + ex.getMessage());
+    // System.out.println("SQLState:" + ex.getSQLState());
+    // System.out.println("VendorError:" + ex.getErrorCode());
 
-        }
+    // }
+
+    // }
+
+    Arme arme1 = new Arme(1);
+
+    public static void fillArmes() {
 
     }
 }
