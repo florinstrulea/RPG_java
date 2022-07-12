@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.google.common.base.Optional;
@@ -19,12 +20,11 @@ import exorpg.utils.DBManager;
 
 public class App {
 
-    static BasicItem[] availableItems = new BasicItem[5];
+    static ArrayList<BasicItem> availableItems = new ArrayList<>();
     static Armure[] availableArmors = new Armure[10];
     static Arme[] availableWeapons = new Arme[10];
     static Personnage[] monstres = new Personnage[10];
     static Scanner scan;
-    static Statement statement = null;
     static String sql = null;
 
     public static void main(String[] args) {
@@ -33,6 +33,7 @@ public class App {
         scan = new Scanner(System.in);
         createItems();
         generateDungeon();
+        fillPotions();
 
         System.out.println(availableArmors);
         Personnage paul = new Personnage("Jean-Paul");
@@ -54,9 +55,9 @@ public class App {
         // System.out.println(e.getStackTrace());
         // }
 
-        paul.ajouterItem(availableItems[0]);
-        paul.ajouterItem(availableItems[0]);
-        paul.ajouterItem(availableItems[0]);
+        // paul.ajouterItem(availableItems[0]);
+        // paul.ajouterItem(availableItems[0]);
+        // paul.ajouterItem(availableItems[0]);
 
         for (Personnage personnage : monstres) {
             System.out.println("Vous combattez " + personnage);
@@ -149,17 +150,17 @@ public class App {
     }
 
     public static void createItems() {
-        for (int i = 0; i < availableItems.length; i++) {
-            availableItems[i] = new PotionSoin("Potion " + (i + 1) * 5 + "PV");
-            ((PotionSoin) availableItems[i]).setPvRendu((i + 1) * 5);
+        // for (int i = 0; i < availableItems.length; i++) {
+        // availableItems[i] = new PotionSoin("Potion " + (i + 1) * 5 + "PV");
+        // ((PotionSoin) availableItems[i]).setPvRendu((i + 1) * 5);
 
-            // sql = "insert into potions (type, nom, valeur, poids) values"
-            // + "(0,'" + availableItems[i].getNom() + "',"
-            // + ((PotionSoin) availableItems[i]).getPvRendu() + ","
-            // + availableItems[i].getPoids() + ");";
-            // DBManager.executeUpdate(sql);
+        // // sql = "insert into potions (type, nom, valeur, poids) values"
+        // // + "(0,'" + availableItems[i].getNom() + "',"
+        // // + ((PotionSoin) availableItems[i]).getPvRendu() + ","
+        // // + availableItems[i].getPoids() + ");";
+        // // DBManager.executeUpdate(sql);
 
-        }
+        // }
         String[] types = new String[] { "Papier", "Bois", "Cuivre", "Fer", "Or", "Diamand", "Flammes", "Glace", "Ether",
                 "Divine" };
         for (int i = 0; i < availableArmors.length; i++) {
@@ -182,5 +183,28 @@ public class App {
             // + availableWeapons[i].getPoids() + ")";
             // DBManager.executeUpdate(sql);
         }
+    }
+
+    public static void fillPotions() {
+        sql = "select nom, valeur from potions";
+        ResultSet result = DBManager.execute(sql);
+        try {
+            while (result.next()) {
+                PotionSoin potion = new PotionSoin(result.getString("nom"));
+                ((PotionSoin) potion).setPvRendu(result.getInt("valeur"));
+                availableItems.add(potion);
+
+            }
+            for (BasicItem item : availableItems) {
+                System.out.println(item.getNom());
+                System.out.println(((PotionSoin) item).getPvRendu());
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
+
+        }
+
     }
 }
