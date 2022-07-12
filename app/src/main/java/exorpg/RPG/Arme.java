@@ -8,7 +8,7 @@ import exorpg.utils.DBManager;
 public class Arme extends BasicItem implements Equipable {
     public int degats = 0;
     public float critique = 0;
-    public int id;
+    public int id = 0;
 
     public Arme(String nom) {
         super(nom);
@@ -60,6 +60,28 @@ public class Arme extends BasicItem implements Equipable {
 
         }
         return false;
+    }
+
+    public boolean save(int id) {
+        String sql;
+        if (this.id != 0) {
+            sql = "update armes "
+                    + "set nom= '" + this.nom + "'" +
+                    "set degats= " + this.degats + " " +
+                    "set critique= " + this.critique + " " +
+                    "set poids= " + this.poids + " " +
+                    "set icon= '" + this.icon + "'";
+        } else {
+            sql = "insert into armes(nom, degats, critique,poids, icon) " +
+                    "values(" +
+                    "'" + this.nom + "'" +
+                    "'" + this.degats + "'" +
+                    "'" + this.critique + "'" +
+                    "'" + this.poids + "'" +
+                    "'" + this.icon + "')";
+
+        }
+        return (DBManager.executeUpdate(sql) > 0);
     }
 
     public int getDegats() {
