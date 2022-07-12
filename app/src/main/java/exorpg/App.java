@@ -40,9 +40,15 @@ public class App {
         arme2.get(2);
         System.out.println(arme2.getNom());
 
-        Arme arme3 = new Arme(3);
-        arme3.setNom("Epée invisible");
-        arme3.save();
+        // Arme arme3 = new Arme(3);
+        // arme3.setNom("Epée invisible");
+        // arme3.save();
+
+        Arme arme4 = new Arme("Hache de toto");
+        arme4.setDegats(60);
+        arme4.setCritique(0.1f);
+        arme4.setPoids(2);
+        arme4.save();
         // try {
         // // Statement stmt = DBManager.connection.createStatement();
         // String sql = "insert into armes(nom,degats,critique,poid) values(?,?,?,?)";

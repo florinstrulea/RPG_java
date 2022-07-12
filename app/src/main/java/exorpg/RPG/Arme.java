@@ -101,20 +101,22 @@ public class Arme extends BasicItem implements Equipable {
 
         try {
             PreparedStatement pstmt = DBManager.connection.prepareStatement(sql);
-            DBManager.pstmt.setString(1, this.nom);
-            DBManager.pstmt.setInt(2, this.degats);
-            DBManager.pstmt.setFloat(3, this.critique);
-            DBManager.pstmt.setInt(4, this.poids);
-            DBManager.pstmt.setString(5, this.icon);
+            pstmt.setString(1, this.nom);
+            pstmt.setInt(2, this.degats);
+            pstmt.setFloat(3, this.critique);
+            pstmt.setInt(4, this.poids);
+            pstmt.setString(5, this.icon);
             if (id != 0) {
                 pstmt.setInt(6, this.id);
             }
+            return pstmt.execute();
+
         } catch (SQLException ex) {
             System.out.println("SQLException:" + ex.getMessage());
             System.out.println("SQLState:" + ex.getSQLState());
             System.out.println("VendorError:" + ex.getErrorCode());
+            return false;
         }
-        return (DBManager.executeUpdate(sql) > 0);
 
     }
 
