@@ -1,6 +1,10 @@
 package exorpg.RPG;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
+
+import exorpg.utils.DBManager;
 import exorpg.utils.Model;
 
 public class Personnage extends Model {
@@ -11,6 +15,8 @@ public class Personnage extends Model {
     protected String nom;
     protected int pv = 50;
     protected int force = 1;
+    protected int type;
+    protected int pvMax;
 
     protected ArrayList<BasicItem> inventaire = new ArrayList<BasicItem>();
 
@@ -88,6 +94,22 @@ public class Personnage extends Model {
         this.force = force;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getPvMax() {
+        return pvMax;
+    }
+
+    public void setPvMax(int pvMax) {
+        this.pvMax = pvMax;
+    }
+
     // #endregion
     public float attaquer(Personnage autre) {
         int degats = equipedWeapon.getDegats();
@@ -150,7 +172,24 @@ public class Personnage extends Model {
 
     @Override
     public boolean get(int id) {
-        // TODO Auto-generated method stub
+        try {
+            ResultSet result = DBManager.execute("select * from personnages where id_personnage=" + id);
+            if (result.next()) {
+                this.type = result.getInt("type");
+                this.nom = result.getString("nom");
+                this.pv = result.getInt("pv");
+                this.pvMax = result.getInt("pvMax");
+                this.force = result.getInt("force");
+                this.id = id;
+                return true;
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
+
+        }
         return false;
     }
 
