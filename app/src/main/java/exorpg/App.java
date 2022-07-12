@@ -34,6 +34,7 @@ public class App {
         createItems();
         generateDungeon();
         // fillPotions();
+        Arme arme1 = new Arme(1);
 
         System.out.println(availableArmors);
         Personnage paul = new Personnage("Jean-Paul");
@@ -207,8 +208,6 @@ public class App {
     // }
 
     // }
-
-    Arme arme1 = new Arme(1);
 
     public static void fillArmes() {
 

@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import exorpg.utils.DBManager;
 
 public class Arme extends BasicItem implements Equipable {
-    int degats = 0;
-    float critique = 0;
-    int id;
+    public int degats = 0;
+    public float critique = 0;
+    public int id;
 
     public Arme(String nom) {
         super(nom);
