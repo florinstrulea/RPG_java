@@ -50,4 +50,39 @@ public class PersonnageTest {
 
     }
 
+    public void saveTest() {
+        Personnage perso1 = new Personnage();
+
+        perso1.setType(1);
+        perso1.setNom("Michael");
+        perso1.setPv(60);
+        perso1.setPvMax(60);
+        perso1.setForce(5);
+        perso1.setWeaponId(2);
+        perso1.setArmorId(1);
+
+        assertTrue(perso1.save());
+    }
+
+    public void updateTest() {
+        Personnage perso1 = new Personnage();
+
+        perso1.setType(1);
+        perso1.setNom("Michael");
+        perso1.setPv(60);
+        perso1.setPvMax(60);
+        perso1.setForce(5);
+        perso1.setWeaponId(2);
+        perso1.setArmorId(1);
+
+        Personnage perso2 = new Personnage(perso1.getId());
+        perso2.setNom("Tommy");
+
+        perso2.save();
+
+        perso1.get();
+
+        assertTrue(perso1.getNom() == perso2.getNom());
+    }
+
 }

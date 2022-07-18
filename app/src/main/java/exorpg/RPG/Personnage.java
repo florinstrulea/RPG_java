@@ -1,7 +1,9 @@
 package exorpg.RPG;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 import exorpg.utils.DBManager;
@@ -22,6 +24,32 @@ public class Personnage extends Model {
 
     protected Armure armor = aucune;
     protected Arme equipedWeapon = poings;
+
+    protected int weaponId;
+    protected int armorId;
+
+    public Personnage() {
+
+    }
+
+    public Personnage(int id) {
+        try {
+            ResultSet result = DBManager.execute("select * from personnages where id_personnage=" + id);
+            if (result.next()) {
+                this.nom = result.getString("nom");
+                this.pv = result.getInt("pv");
+                this.pvMax = result.getInt("pvMax");
+                this.force = result.getInt("force");
+                this.weaponId = result.getInt("id_arme");
+                this.armorId = result.getInt("id_armure");
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
+
+        }
+    }
 
     public Personnage(String nom) {
         this.nom = nom;
@@ -108,6 +136,22 @@ public class Personnage extends Model {
 
     public void setPvMax(int pvMax) {
         this.pvMax = pvMax;
+    }
+
+    public int getWeaponId() {
+        return weaponId;
+    }
+
+    public void setWeaponId(int weaponId) {
+        this.weaponId = weaponId;
+    }
+
+    public int getArmorId() {
+        return armorId;
+    }
+
+    public void setArmorId(int armorId) {
+        this.armorId = armorId;
     }
 
     // #endregion
@@ -216,8 +260,43 @@ public class Personnage extends Model {
 
     @Override
     public boolean save() {
-        // TODO Auto-generated method stub
-        return false;
+        String sql;
+        if (this.id != 0)
+            sql = "UPDATE personnages " +
+                    "SET type = ?, nom = ?, pv=?, pvMax=?, force=?, id_armure=? , id_arme=?" +
+                    "WHERE id_personnage = ?";
+        else
+            sql = "INSERT INTO armes (type, nom, pv, pvMax, force, id_armure, id)" +
+                    "VALUES(?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement stmt = DBManager.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, this.type);
+            stmt.setString(2, this.nom);
+            stmt.setInt(3, this.pv);
+            stmt.setInt(4, this.pvMax);
+            stmt.setInt(5, this.force);
+            stmt.setInt(6, this.equipedWeapon.getId());
+            stmt.setInt(7, this.armor.getId());
+            if (id != 0)
+                stmt.setInt(8, this.id);
+
+            stmt.executeUpdate();
+
+            ResultSet keys = stmt.getGeneratedKeys();
+            if (this.id == 0 && keys.next()) {
+                this.id = keys.getInt(1);
+                return true;
+            } else if (this.id != 0)
+                return true;
+            else
+                return false;
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
+            return false;
+        }
     }
 
 }

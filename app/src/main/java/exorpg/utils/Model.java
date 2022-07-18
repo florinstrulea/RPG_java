@@ -8,4 +8,13 @@ public abstract class Model {
     public abstract boolean get(int id);
 
     public abstract boolean save();
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 }
