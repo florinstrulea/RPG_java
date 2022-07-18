@@ -55,6 +55,28 @@ public class PotionSoin extends BasicItem implements Consommable {
     }
 
     @Override
+    public boolean get() {
+        try {
+            ResultSet result = DBManager.execute("select * from potions where id_potion=" + this.id);
+            if (result.next()) {
+                this.type = result.getInt("type");
+                this.nom = result.getString("nom");
+                this.pvRendu = result.getInt("valeur");
+                this.poids = result.getInt("poids");
+                this.icon = result.getString("icon");
+                return true;
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
+
+        }
+        return false;
+    }
+
+    @Override
     public boolean get(int id) {
         try {
             ResultSet result = DBManager.execute("select * from potions where id_potion=" + id);

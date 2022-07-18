@@ -67,6 +67,27 @@ public class Armure extends BasicItem implements Equipable {
     }
 
     @Override
+    public boolean get() {
+        try {
+            ResultSet result = DBManager.execute("select * from armures where id_armure=" + this.id);
+            if (result.next()) {
+                this.nom = result.getString("nom");
+                this.defense = result.getInt("defense");
+                this.poids = result.getInt("poids");
+                this.icon = result.getString("icon");
+                return true;
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException:" + ex.getMessage());
+            System.out.println("SQLState:" + ex.getSQLState());
+            System.out.println("VendorError:" + ex.getErrorCode());
+
+        }
+        return false;
+    }
+
+    @Override
     public boolean get(int id) {
         try {
             ResultSet result = DBManager.execute("select * from armures where id_armure=" + id);
@@ -121,4 +142,5 @@ public class Armure extends BasicItem implements Equipable {
             return false;
         }
     }
+
 }

@@ -76,7 +76,6 @@ public class Arme extends BasicItem implements Equipable {
                 this.critique = resultat.getFloat("critique");
                 this.poids = resultat.getInt("poids");
                 this.icon = resultat.getString("icon");
-                this.id = id;
                 return true;
             }
         } catch (SQLException ex) {

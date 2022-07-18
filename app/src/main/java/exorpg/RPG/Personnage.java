@@ -171,6 +171,27 @@ public class Personnage extends Model {
     }
 
     @Override
+    public boolean get() {
+        try {
+            ResultSet result = DBManager.execute("SELECT * FROM armes WHERE id_arme = " + this.id);
+            if (result.next()) {
+                this.type = result.getInt("type");
+                this.nom = result.getString("nom");
+                this.pv = result.getInt("pv");
+                this.pvMax = result.getInt("pvMax");
+                this.force = result.getInt("force");
+                return true;
+            }
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return false;
+    }
+
+    @Override
     public boolean get(int id) {
         try {
             ResultSet result = DBManager.execute("select * from personnages where id_personnage=" + id);
