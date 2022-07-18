@@ -3,13 +3,17 @@ package exorpg.RPG;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import exorpg.utils.DBManager;
 
 public class Arme extends BasicItem implements Equipable {
     public int degats = 0;
     public float critique = 0;
-    public int id = 0;
+
+    public Arme() {
+        super("");
+    }
 
     public Arme(String nom) {
         super(nom);
@@ -63,53 +67,56 @@ public class Arme extends BasicItem implements Equipable {
         return false;
     }
 
-    // public boolean save() {
-    // String sql;
-    // if (this.id != 0) {
-    // sql = "update armes" +
-    // " set nom= '" + this.nom + "'," +
-    // " degats= " + this.degats + ", " +
-    // " critique= " + this.critique + ", " +
-    // " poids= " + this.poids + ", " +
-    // " icon= '" + this.icon + "'" +
-    // " where id_arme= " + id;
-    // } else {
-    // sql = "insert into armes(nom, degats, critique,poids, icon) " +
-    // "values(" +
-    // "'" + this.nom + "'" +
-    // "'" + this.degats + "'" +
-    // "'" + this.critique + "'" +
-    // "'" + this.poids + "'" +
-    // "'" + this.icon + "')";
-
-    // }
-    // return (DBManager.executeUpdate(sql) > 0);
-    // }
+    public boolean get() {
+        try {
+            ResultSet resultat = DBManager.execute("SELECT * FROM armes WHERE id_arme = " + this.id);
+            if (resultat.next()) {
+                this.nom = resultat.getString("nom");
+                this.degats = resultat.getInt("degats");
+                this.critique = resultat.getFloat("critique");
+                this.poids = resultat.getInt("poids");
+                this.icon = resultat.getString("icon");
+                this.id = id;
+                return true;
+            }
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return false;
+    }
 
     public boolean save() {
         String sql;
-        if (this.id != 0) {
-            sql = "update armes" +
-                    " set nom=?, degats=?, critique=?, poids=?, icon=?" +
-                    " where id_arme= ?";
-
-        } else {
-
-            sql = "insert into armes(nom, degats, critique,poids, icon) " +
-                    "values(?,?,?,?,?)";
-        }
-
+        if (this.id != 0)
+            sql = "UPDATE armes " +
+                    "SET nom = ?, degats = ?, critique = ?, poids = ?, icon = ?" +
+                    "WHERE id_arme = ?";
+        else
+            sql = "INSERT INTO armes (nom, degats, critique, poids, icon)" +
+                    "VALUES(?, ?, ?, ?, ?)";
         try {
-            PreparedStatement pstmt = DBManager.connection.prepareStatement(sql);
-            pstmt.setString(1, this.nom);
-            pstmt.setInt(2, this.degats);
-            pstmt.setFloat(3, this.critique);
-            pstmt.setInt(4, this.poids);
-            pstmt.setString(5, this.icon);
-            if (id != 0) {
-                pstmt.setInt(6, this.id);
-            }
-            return pstmt.execute();
+            PreparedStatement stmt = DBManager.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, this.nom);
+            stmt.setInt(2, this.degats);
+            stmt.setFloat(3, this.critique);
+            stmt.setInt(4, this.poids);
+            stmt.setString(5, this.icon);
+            if (id != 0)
+                stmt.setInt(6, this.id);
+
+            stmt.executeUpdate();
+
+            ResultSet keys = stmt.getGeneratedKeys();
+            if (this.id == 0 && keys.next()) {
+                this.id = keys.getInt(1);
+                return true;
+            } else if (this.id != 0)
+                return true;
+            else
+                return false;
 
         } catch (SQLException ex) {
             System.out.println("SQLException:" + ex.getMessage());
