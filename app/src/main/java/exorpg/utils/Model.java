@@ -7,5 +7,5 @@ public abstract class Model {
 
     public abstract boolean get(int id);
 
-    public abstract boolean save(int id);
+    public abstract boolean save();
 }

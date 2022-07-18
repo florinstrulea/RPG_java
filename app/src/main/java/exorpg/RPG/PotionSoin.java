@@ -100,7 +100,7 @@ public class PotionSoin extends BasicItem implements Consommable {
     }
 
     @Override
-    public boolean save(int id) {
+    public boolean save() {
         String sql;
         if (this.id != 0) {
             sql = "update armures" +

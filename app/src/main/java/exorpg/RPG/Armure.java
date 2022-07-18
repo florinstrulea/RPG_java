@@ -110,7 +110,7 @@ public class Armure extends BasicItem implements Equipable {
     }
 
     @Override
-    public boolean save(int id) {
+    public boolean save() {
         String sql;
         if (this.id != 0) {
             sql = "update armures" +

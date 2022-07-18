@@ -2,10 +2,13 @@ package exorpg;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import exorpg.RPG.Arme;
 import exorpg.RPG.Armure;
+import exorpg.RPG.BasicItem;
 import exorpg.RPG.Personnage;
 
 public class PersonnageTest {
@@ -14,6 +17,8 @@ public class PersonnageTest {
 
     protected Armure armor = aucune;
     protected Arme equipedWeapon = poings;
+
+    protected ArrayList<BasicItem> inventaire = new ArrayList<BasicItem>();
 
     @Test
     public void getHit() {
@@ -38,6 +43,11 @@ public class PersonnageTest {
 
         perso.attaquer(villain);
         assertTrue(villain.getPv() == 60);
+    }
+
+    @Test
+    public void equipTest() {
+
     }
 
 }
