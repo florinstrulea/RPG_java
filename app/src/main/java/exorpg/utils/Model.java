@@ -1,7 +1,7 @@
 package exorpg.utils;
 
 public abstract class Model {
-    public int id = 0;
+    public int id;
 
     public abstract boolean get();
 

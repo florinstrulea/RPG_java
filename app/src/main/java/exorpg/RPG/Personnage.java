@@ -42,6 +42,7 @@ public class Personnage extends Model {
                 this.force = result.getInt("force");
                 this.weaponId = result.getInt("id_arme");
                 this.armorId = result.getInt("id_armure");
+                this.id = id;
             }
         } catch (SQLException ex) {
             System.out.println("SQLException:" + ex.getMessage());
@@ -217,7 +218,7 @@ public class Personnage extends Model {
     @Override
     public boolean get() {
         try {
-            ResultSet result = DBManager.execute("SELECT * FROM armes WHERE id_arme = " + this.id);
+            ResultSet result = DBManager.execute("SELECT * FROM personnages WHERE id_personnage = " + this.id);
             if (result.next()) {
                 this.type = result.getInt("type");
                 this.nom = result.getString("nom");
@@ -263,11 +264,11 @@ public class Personnage extends Model {
         String sql;
         if (this.id != 0)
             sql = "UPDATE personnages " +
-                    "SET type = ?, nom = ?, pv=?, pvMax=?, force=?, id_armure=? , id_arme=?" +
-                    "WHERE id_personnage = ?";
+                    "SET type = ?, nom = ?, pv=?, pvMax=?, `force`=?, id_armure=? , id_arme=?" +
+                    " WHERE id_personnage = ?";
         else
-            sql = "INSERT INTO armes (type, nom, pv, pvMax, force, id_armure, id)" +
-                    "VALUES(?, ?, ?, ?, ?)";
+            sql = "INSERT INTO personnages (type, nom, pv, pvMax, `force`, id_armure, id_arme)" +
+                    " VALUES(?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement stmt = DBManager.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, this.type);
@@ -275,8 +276,8 @@ public class Personnage extends Model {
             stmt.setInt(3, this.pv);
             stmt.setInt(4, this.pvMax);
             stmt.setInt(5, this.force);
-            stmt.setInt(6, this.equipedWeapon.getId());
-            stmt.setInt(7, this.armor.getId());
+            stmt.setInt(6, this.armorId);
+            stmt.setInt(7, this.weaponId);
             if (id != 0)
                 stmt.setInt(8, this.id);
 

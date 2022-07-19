@@ -2,14 +2,20 @@ package exorpg;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.Savepoint;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import exorpg.RPG.Arme;
 import exorpg.RPG.Armure;
 import exorpg.RPG.BasicItem;
 import exorpg.RPG.Personnage;
+import exorpg.utils.DBManager;
 
 public class PersonnageTest {
     protected static Arme poings = new Arme("Poings", 10, 0.01f);
@@ -32,6 +38,29 @@ public class PersonnageTest {
         assertTrue(perso.getPv() == 90);
     }
 
+    Savepoint save;
+
+    @BeforeAll
+    public static void setup() {
+        DBManager.init();
+        DBManager.setAutocommit(false);
+    }
+
+    @BeforeEach
+    public void init() {
+        save = DBManager.setSavePoint();
+    }
+
+    @AfterEach
+    public void done() {
+        DBManager.rollback(save);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        DBManager.close();
+    }
+
     @Test
     public void attack() {
         Personnage perso = new Personnage("John", 100, 30);
@@ -50,6 +79,7 @@ public class PersonnageTest {
 
     }
 
+    @Test
     public void saveTest() {
         Personnage perso1 = new Personnage();
 
@@ -58,12 +88,13 @@ public class PersonnageTest {
         perso1.setPv(60);
         perso1.setPvMax(60);
         perso1.setForce(5);
-        perso1.setWeaponId(2);
         perso1.setArmorId(1);
+        perso1.setWeaponId(2);
 
         assertTrue(perso1.save());
     }
 
+    @Test
     public void updateTest() {
         Personnage perso1 = new Personnage();
 
@@ -72,8 +103,10 @@ public class PersonnageTest {
         perso1.setPv(60);
         perso1.setPvMax(60);
         perso1.setForce(5);
-        perso1.setWeaponId(2);
         perso1.setArmorId(1);
+        perso1.setWeaponId(2);
+
+        perso1.save();
 
         Personnage perso2 = new Personnage(perso1.getId());
         perso2.setNom("Tommy");
@@ -82,7 +115,7 @@ public class PersonnageTest {
 
         perso1.get();
 
-        assertTrue(perso1.getNom() == perso2.getNom());
+        assertTrue(perso1.getNom().equals(perso2.getNom()));
     }
 
 }

@@ -22,7 +22,7 @@ public class Armure extends BasicItem implements Equipable {
     public Armure(int id) {
         super("");
         try {
-            ResultSet result = DBManager.execute("select * from armures where id_arme=" + id);
+            ResultSet result = DBManager.execute("select * from armures where id_armures=" + id);
             if (result.next()) {
                 this.nom = result.getString("nom");
                 this.defense = result.getInt("defense");
@@ -46,6 +46,10 @@ public class Armure extends BasicItem implements Equipable {
     }
 
     @Override
+    // Avec la methode si le personnage à une arme on la retire et on la met dans
+    // l'inventaire
+    // Si dans l'inventaire il y a une autre arme on l'echange et donc on equipe
+    // l'arme et on mets l'autre dans l'inventaire
     public boolean equip(Personnage target) {
         if (target.getArmor() != null)
             target.ajouterItem(target.getArmor());
