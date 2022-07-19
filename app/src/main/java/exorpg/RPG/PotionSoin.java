@@ -3,14 +3,13 @@ package exorpg.RPG;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import exorpg.utils.DBManager;
 
 public class PotionSoin extends BasicItem implements Consommable {
     protected int pvRendu = 0;
     protected int type = 0;
-
-    public int id;
 
     public PotionSoin(String nom) {
         super(nom);
@@ -19,11 +18,12 @@ public class PotionSoin extends BasicItem implements Consommable {
     public PotionSoin(int id) {
         super("");
         try {
-            ResultSet result = DBManager.execute("select * from armes where id_arme=" + id);
+            ResultSet result = DBManager.execute("select * from potions where id_potion=" + id);
             if (result.next()) {
                 this.nom = result.getString("nom");
-                this.pvRendu = result.getInt("defense");
+                this.pvRendu = result.getInt("valeur");
                 this.poids = result.getInt("poids");
+                this.id = id;
             }
         } catch (SQLException ex) {
             System.out.println("SQLException:" + ex.getMessage());
@@ -31,6 +31,11 @@ public class PotionSoin extends BasicItem implements Consommable {
             System.out.println("VendorError:" + ex.getErrorCode());
 
         }
+    }
+
+    public PotionSoin(String nom, int pvRendu) {
+        super(nom);
+        this.pvRendu = pvRendu;
     }
 
     public int getPvRendu() {
@@ -57,7 +62,7 @@ public class PotionSoin extends BasicItem implements Consommable {
     @Override
     public boolean get() {
         try {
-            ResultSet result = DBManager.execute("select * from potions where id_potion=" + this.id);
+            ResultSet result = DBManager.execute("SELECT * FROM potions WHERE id_potion=" + this.id);
             if (result.next()) {
                 this.type = result.getInt("type");
                 this.nom = result.getString("nom");
@@ -103,18 +108,18 @@ public class PotionSoin extends BasicItem implements Consommable {
     public boolean save() {
         String sql;
         if (this.id != 0) {
-            sql = "update armures" +
+            sql = "update potions" +
                     " set type=?, nom=?, valeur=?, poids=?, icon=?" +
                     " where id_potion= ?";
 
         } else {
 
-            sql = "insert into armures(type,nom, valeur, poids, icon) " +
+            sql = "insert into potions(type,nom, valeur, poids, icon) " +
                     "values(?,?,?,?,?)";
         }
 
         try {
-            PreparedStatement pstmt = DBManager.connection.prepareStatement(sql);
+            PreparedStatement pstmt = DBManager.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, this.type);
             pstmt.setString(2, this.nom);
             pstmt.setInt(3, this.pvRendu);
@@ -124,7 +129,16 @@ public class PotionSoin extends BasicItem implements Consommable {
             if (id != 0) {
                 pstmt.setInt(6, this.id);
             }
-            return pstmt.execute();
+            pstmt.executeUpdate();
+
+            ResultSet keys = pstmt.getGeneratedKeys();
+            if (this.id == 0 && keys.next()) {
+                this.id = keys.getInt(1);
+                return true;
+            } else if (this.id != 0)
+                return true;
+            else
+                return false;
 
         } catch (SQLException ex) {
             System.out.println("SQLException:" + ex.getMessage());
